@@ -30,11 +30,9 @@ classes = ["person", "bicycle", "car", "motorcycle",
 len(classes)
 
 #상황별 필요 객체 목록
-meal_con = ["bottle", "wine glass", "cup", "fork", "knife",
-            "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli", "carrot", "hot dog",
-            "pizza", "donut", "cake"]
-media_con = ["remote","cell phone","tv","couch","bed"]
-work_con = ["book","keyboard", "laptop", "mouse"]
+meal_con = ["bottle", "bowl", "cup"]
+media_con = ["remote", "cell phone"]
+work_con = ["keyboard", "laptop", "book"]
 
 #결과 송출 부분
 meal_check = 0
@@ -76,7 +74,7 @@ def calculate_Y_diff(a, b):
 
 
 # 통신 정보 설정
-IP = '10.92.94.188'
+IP = '192.168.0.14'
 PORT = 8080
 SIZE = 1024
 ADDR = (IP, PORT)
@@ -89,7 +87,7 @@ stage = {
     "CurrentMoment" : "test currnet",
     "PreviousMoment": "test upcoming"
 }
-temp = cv2.VideoCapture(0) #카메라
+temp = cv2.VideoCapture(cv2.CAP_DSHOW) #카메라
 stage['CurrentMoment'] = "Initial"
 result = json.dumps(stage)
 motion = "-"
@@ -125,7 +123,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             temp_ret, temp_frame = temp.read()
             #사진 저장
             cv2.imwrite("temp.png", temp_frame)
-            time.sleep(0.5)
+            # time.sleep(0.5)
             #저장된 이미지
             img = cv2.imread("temp.png") 
             ret, frame = temp.read()
@@ -195,7 +193,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         
         
             # 동작1 sit
-            if motion == "stand": #마지막에 sit으로 바꾸자
+            if motion == "sit": #마지막에 sit으로 바꾸자
                         #img load
                 img = cv2.imread("temp.png")
                 #img = cv2.resize(img, None, fx=0.4, fy=0.4)
@@ -303,7 +301,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
                     
                     
                 
-                time.sleep(0.2)
+                # time.sleep(0.2)
                 
                 
                 
@@ -425,7 +423,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
         
         
         
-            time.sleep(0.2)
+            # time.sleep(0.2)
 
 
         
@@ -437,16 +435,16 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket:
             print(NOW)
 
             
-            if(NOW.count("work")  == 3):
+            if(NOW.count("work")  == 2):
                 stage["CurrentMoment"] = "work"
                 
-            elif(NOW.count("media")  == 3):
+            elif(NOW.count("media")  == 2):
                 stage["CurrentMoment"] = "media"
                 
-            elif(NOW.count("meal")  == 3):
+            elif(NOW.count("meal")  == 2):
                 stage["CurrentMoment"] = "meal"
                 
-            elif(NOW.count("sleep")  == 3):
+            elif(NOW.count("sleep")  == 2):
                 stage["CurrentMoment"] = "sleep"
                 
             else:
